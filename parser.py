@@ -5,24 +5,39 @@ import data
 import re
 
 
+# method of parsing data
 def parsing(url: str, klass: int, lesson: str):
-    print("parser")
     resp = requests.get(url)
+    soup = bs4.BeautifulSoup(resp.text, 'lxml')                             # connecting with bs4 to site
 
-    soup = bs4.BeautifulSoup(resp.text, 'lxml')
+    div = soup.find_all('div', attrs={'class': 'book-box book-item'})       # finding all containers with data of book
 
-    ul = soup.find_all('ul', attrs={'class': 'book-item-info'})
+    for each_div in div:                                                    # parsing data of each book
+        # var of type and year of the book
+        year = 0
+        tip = ''
 
-    for each_ul in ul:
-        name_book = None
+        # split container  for some useful parts
+        h3 = re.split('<h3>', str(each_div))
+        li = re.split('</strong>', str(each_div))
+        img = re.split('"lazy" src="', str(each_div))
 
-        li = each_ul.find_all('li')
-        for each_li in li:
-            test_name = each_li.find('h3')
-            if test_name:
-                name_book = each_li.find('h3').text
+        # taking book's information
+        name_book = re.split('</', h3[1])
+        authors = re.split('</li>', li[1])
+        kind = re.split('<strong>', li[1])
+        img_src = re.split('"', img[1])
 
-            DB.insert(klass, data.lesson[lesson], name_book)
+        # taking the year and type of book
+        if kind[1] == 'Рік видання: ':
+            y = re.split('</li>', li[2])
+            year = int(y[0])
+            tip = ''
+        elif kind[1] == 'Тип: ':
+            y = re.split('</li>', li[3])
+            year = int(y[0])
+            t = re.split('</li>', li[2])
+            tip = t[0]
 
-            if name_book or name_book == "":
-                break
+        # inserting all data in database
+        DB.insert(klass, data.lesson[lesson], name_book[0], authors[0], tip, year, img_src[0])
