@@ -23,7 +23,7 @@ At same directory will be made [gdz.db]. There will be all parsed data.
 ## Work process
 
 		|-------------------------|             |------------|
-                |     	   Main.p         |------------>|   DB.py    |
+                |     	   Main.py        |------------>|   DB.py    |
                 |-------------------------|             |------------|
                          /                                      ^
                         /                                       |
