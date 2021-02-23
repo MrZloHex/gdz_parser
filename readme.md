@@ -22,8 +22,8 @@ At same directory will be made [gdz.db]. There will be all parsed data.
 
 ## Work process
 
-				|-------------------------|             |------------|
-                |     	   Main.py	      |------------>|   DB.py	 |
+		|-------------------------|             |------------|
+                |     	   Main.p         |------------>|   DB.py    |
                 |-------------------------|             |------------|
                          /                                      ^
                         /                                       |
